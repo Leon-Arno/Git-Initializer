@@ -5,6 +5,7 @@ const ConfigStore = require('configstore');
 
 const files = require('./lib/files');
 const inquirer = require('./lib/inquirer');
+const githubHandler = require('./lib/githubHandler');
 
 clear();
 console.log(
@@ -17,9 +18,15 @@ if (files.directoryExists('.git')) {
 }
 
 const getDetails = async () => {
-  const credentials = await inquirer.requestGithubCredentials();
-  console.log(credentials);
+  let token = github.getStoredGitHubToken();
+  if (!token) {
+    await github.setGitHubCredentials();
+    token = await github.registerNewToken();
+  }
+  console.log(token);
 };
 getDetails();
 
 const configure = new ConfigStore('git-initializer');
+
+const argv = require('minimist')(process.argv.slice(2));
