@@ -19,3 +19,10 @@ On execution:
 4. Select your preferences and you are done and ready for development.
 
 ## Usage
+
+1. Clone the repository to desired location.
+2. Run `npm install` in the directory to get dependencies.
+3. Install the module globally by running `npm install -g`
+4. Run `git-initializer <repo-name> <repository description>`
+
+Done!
