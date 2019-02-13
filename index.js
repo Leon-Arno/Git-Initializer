@@ -20,10 +20,22 @@ if (files.directoryExists('.git')) {
   process.exit();
 }
 
+const getGitHubToken = async () => {
+  let token = githubHandler.getStoredGitHubToken();
+  if (token) {
+    return token;
+  }
+
+  await githubHandler.setGitHubCredentials();
+
+  token = await githubHandler.registerNewToken();
+  return token;
+};
+
 const runApp = async () => {
   try {
     const token = await getGitHubToken();
-    github.gitHubAuth(token);
+    githubHandler.gitHubAuth(token);
 
     const url = await repo.createRemoteRepo();
 
@@ -53,18 +65,6 @@ const runApp = async () => {
   }
 };
 runApp();
-
-const getGitHubToken = async () => {
-  let token = github.getStoredGitHubToken();
-  if (token) {
-    return token;
-  }
-
-  await github.setGitHubCredentials();
-
-  token = await github.registerNewToken();
-  return token;
-};
 
 const configure = new ConfigStore('git-initializer');
 
